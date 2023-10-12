@@ -1,0 +1,11 @@
+/Users/0xdev/workspace/code/doh-cloudflare-worker/target/debug/deps/parse_zoneinfo-d5d59b3cfaf60195.rmeta: /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/lib.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/line.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/structure.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/table.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/0xdev/workspace/code/doh-cloudflare-worker/target/debug/deps/libparse_zoneinfo-d5d59b3cfaf60195.rlib: /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/lib.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/line.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/structure.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/table.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/0xdev/workspace/code/doh-cloudflare-worker/target/debug/deps/parse_zoneinfo-d5d59b3cfaf60195.d: /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/lib.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/line.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/structure.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/table.rs /Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/lib.rs:
+/Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/line.rs:
+/Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/structure.rs:
+/Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/table.rs:
+/Users/0xdev/.cargo/registry/src/index.crates.io-6f17d22bba15001f/parse-zoneinfo-0.3.0/src/transitions.rs:
