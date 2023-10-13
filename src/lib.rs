@@ -1,5 +1,4 @@
-use std::collections::HashMap;
-
+use regex::Regex;
 use worker::{js_sys::Uint8Array, *};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
@@ -74,8 +73,12 @@ fn has_dns_accept_type(headers: &Headers) -> bool {
 
 fn has_dns_params(url_result: Result<Url>) -> bool {
     if let Ok(url) = url_result {
-        let param: HashMap<_, _> = url.query_pairs().collect();
-        return param.contains_key("dns");
+        let Some(query) = url.query() else {
+            return false;
+        };
+
+        let re = Regex::new(r"dns=").unwrap();
+        return re.is_match(query);
     }
 
     false
