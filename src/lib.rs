@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use worker::*;
+use worker::{js_sys::Uint8Array, *};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
 
@@ -96,9 +96,8 @@ async fn make_request(
     }
 
     if let Some(body) = body {
-        let body_as_js_value =
-            serde_wasm_bindgen::to_value(&body).map_err(map_serde_wasm_bindgen_error)?;
-        req_init = req_init.with_body(Some(body_as_js_value));
+        let body_as_js_value = Uint8Array::from(body.as_slice());
+        req_init = req_init.with_body(Some(body_as_js_value.into()));
     }
 
     let request = Request::new_with_init(url, req_init)?;
@@ -107,8 +106,4 @@ async fn make_request(
 
 fn response_404() -> Result<Response> {
     Response::error("Not Found", 404)
-}
-
-fn map_serde_wasm_bindgen_error(error: serde_wasm_bindgen::Error) -> worker::Error {
-    worker::Error::RustError(format!("serde_wasm_bindgen::Error: {:?}", error))
 }
