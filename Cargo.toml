@@ -1,5 +1,5 @@
 [package]
-name = "worker-rust"
+name = "doh-cloudflare-workers"
 version = "0.1.0"
 edition = "2021"
 
