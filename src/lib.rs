@@ -16,6 +16,7 @@ async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
     match req.method() {
         Method::Post if has_dns_content_type(req.headers()) => {
             let body = req.bytes().await?;
+            // req.stre
 
             let mut headers = Headers::new();
             headers.set("Accept", CONTENT_TYPE)?;
@@ -85,7 +86,7 @@ async fn make_request(
     url: &str,
     method: Method,
     headers: Option<Headers>,
-    _body: Option<Vec<u8>>,
+    body: Option<Vec<u8>>,
 ) -> Result<Response> {
     let mut req_init = RequestInit::new();
     let mut req_init = req_init.with_method(method);
@@ -94,10 +95,20 @@ async fn make_request(
         req_init = req_init.with_headers(headers);
     }
 
+    if let Some(body) = body {
+        let body_as_js_value =
+            serde_wasm_bindgen::to_value(&body).map_err(map_serde_wasm_bindgen_error)?;
+        req_init = req_init.with_body(Some(body_as_js_value));
+    }
+
     let request = Request::new_with_init(url, req_init)?;
     Fetch::Request(request).send().await
 }
 
 fn response_404() -> Result<Response> {
     Response::error("Not Found", 404)
+}
+
+fn map_serde_wasm_bindgen_error(error: serde_wasm_bindgen::Error) -> worker::Error {
+    worker::Error::RustError(format!("serde_wasm_bindgen::Error: {:?}", error))
 }
