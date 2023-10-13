@@ -16,7 +16,6 @@ async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
     match req.method() {
         Method::Post if has_dns_content_type(req.headers()) => {
             let body = req.bytes().await?;
-            // req.stre
 
             let mut headers = Headers::new();
             headers.set("Accept", CONTENT_TYPE)?;
