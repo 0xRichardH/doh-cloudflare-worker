@@ -1,12 +1,14 @@
+use once_cell::sync::Lazy;
 use regex::Regex;
 use worker::{js_sys::Uint8Array, *};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
 
 const DOH: &str = "https://security.cloudflare-dns.com/dns-query";
-const DOH_JSON: &str = "https://security.cloudflare-dns.com/dns-query";
 const CONTENT_TYPE: &str = "application/dns-message";
 const ACCEPT_TYPE: &str = "application/dns-json";
+
+static DNS_PARAMS_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"dns=").unwrap());
 
 #[event(fetch)]
 async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
@@ -25,7 +27,7 @@ async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
 
         Method::Get if has_dns_accept_type(req.headers()) => {
             if let Ok(url) = req.url() {
-                let mut doh_json_url = Url::parse(DOH_JSON)?;
+                let mut doh_json_url = Url::parse(DOH)?;
                 doh_json_url.set_query(url.query());
 
                 let mut headers = Headers::new();
@@ -77,8 +79,7 @@ fn has_dns_params(url_result: Result<Url>) -> bool {
             return false;
         };
 
-        let re = Regex::new(r"dns=").unwrap();
-        return re.is_match(query);
+        return DNS_PARAMS_REGEX.is_match(query);
     }
 
     false
