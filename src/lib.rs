@@ -4,7 +4,7 @@ use worker::{js_sys::Uint8Array, *};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
 
-const DOH: &str = "https://security.cloudflare-dns.com/dns-query";
+const DOH: &str = "https://1.1.1.1/dns-query";
 const CONTENT_TYPE: &str = "application/dns-message";
 const ACCEPT_TYPE: &str = "application/dns-json";
 
