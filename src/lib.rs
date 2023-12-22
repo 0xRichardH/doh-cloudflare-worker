@@ -1,5 +1,3 @@
-use once_cell::sync::Lazy;
-use regex::Regex;
 use worker::{js_sys::Uint8Array, *};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
@@ -7,8 +5,6 @@ pub use console_error_panic_hook::set_once as set_panic_hook;
 const DOH: &str = "https://1.1.1.1/dns-query";
 const CONTENT_TYPE: &str = "application/dns-message";
 const ACCEPT_TYPE: &str = "application/dns-json";
-
-static DNS_PARAMS_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"dns=").unwrap());
 
 #[event(fetch)]
 async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
@@ -79,7 +75,7 @@ fn has_dns_params(url_result: Result<Url>) -> bool {
             return false;
         };
 
-        return DNS_PARAMS_REGEX.is_match(query);
+        return query.contains("dns=");
     }
 
     false
