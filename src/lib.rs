@@ -18,7 +18,7 @@ async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
             headers.set("Accept", CONTENT_TYPE)?;
             headers.set("Content-Type", CONTENT_TYPE)?;
 
-            make_request(DOH, Method::Post, Some(headers), Some(body)).await
+            make_request(DOH, Method::Post, Some(headers), Some(&body)).await
         }
 
         Method::Get if has_dns_accept_type(req.headers()) => {
@@ -85,7 +85,7 @@ async fn make_request(
     url: &str,
     method: Method,
     headers: Option<Headers>,
-    body: Option<Vec<u8>>,
+    body: Option<&[u8]>,
 ) -> Result<Response> {
     let mut req_init = RequestInit::new();
     let mut req_init = req_init.with_method(method);
@@ -95,7 +95,7 @@ async fn make_request(
     }
 
     if let Some(body) = body {
-        let body_as_js_value = Uint8Array::from(body.as_slice());
+        let body_as_js_value = Uint8Array::from(body);
         req_init = req_init.with_body(Some(body_as_js_value.into()));
     }
 
