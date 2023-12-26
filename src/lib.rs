@@ -3,51 +3,19 @@ use worker::{js_sys::Uint8Array, *};
 pub use console_error_panic_hook::set_once as set_panic_hook;
 
 const DOH: &str = "https://1.1.1.1/dns-query";
-const CONTENT_TYPE: &str = "application/dns-message";
-const ACCEPT_TYPE: &str = "application/dns-json";
+const DNS_MESSAGE: &str = "application/dns-message";
+const DNS_JSON: &str = "application/dns-json";
 
 #[event(fetch)]
-async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
+async fn main(req: Request, _env: Env, _ctx: Context) -> Result<Response> {
     set_panic_hook();
 
     match req.method() {
-        Method::Post if has_dns_content_type(req.headers()) => {
-            let body = req.bytes().await?;
+        Method::Post if has_dns_content_type(req.headers()) => post_dns_wireformat(req).await,
 
-            let mut headers = Headers::new();
-            headers.set("Accept", CONTENT_TYPE)?;
-            headers.set("Content-Type", CONTENT_TYPE)?;
+        Method::Get if has_dns_accept_type(req.headers()) => get_dns_json(req).await,
 
-            make_request(DOH, Method::Post, Some(headers), Some(&body)).await
-        }
-
-        Method::Get if has_dns_accept_type(req.headers()) => {
-            if let Ok(url) = req.url() {
-                let mut doh_json_url = Url::parse(DOH)?;
-                doh_json_url.set_query(url.query());
-
-                let mut headers = Headers::new();
-                headers.set("Accept", ACCEPT_TYPE)?;
-
-                make_request(doh_json_url.as_str(), Method::Get, Some(headers), None).await
-            } else {
-                response_404()
-            }
-        }
-
-        Method::Get if has_dns_params(req.url()) => {
-            if let Ok(url) = req.url() {
-                let mut doh_url = Url::parse(DOH)?;
-                doh_url.set_query(url.query());
-
-                let mut headers = Headers::new();
-                headers.set("Accept", CONTENT_TYPE)?;
-
-                make_request(doh_url.as_str(), Method::Get, Some(headers), None).await
-            } else {
-                response_404()
-            }
-        }
+        Method::Get if has_dns_params(req.url()) => get_dns_wireformat(req).await,
 
         _ => response_404(),
     }
@@ -55,7 +23,7 @@ async fn main(mut req: Request, _env: Env, _ctx: Context) -> Result<Response> {
 
 fn has_dns_content_type(headers: &Headers) -> bool {
     if let Ok(Some(content_type)) = headers.get("content-type") {
-        return content_type == CONTENT_TYPE;
+        return content_type == DNS_MESSAGE;
     }
 
     false
@@ -63,7 +31,7 @@ fn has_dns_content_type(headers: &Headers) -> bool {
 
 fn has_dns_accept_type(headers: &Headers) -> bool {
     if let Ok(Some(accept)) = headers.get("accept") {
-        return accept == ACCEPT_TYPE;
+        return accept == DNS_JSON;
     }
 
     false
@@ -79,6 +47,44 @@ fn has_dns_params(url_result: Result<Url>) -> bool {
     }
 
     false
+}
+
+async fn post_dns_wireformat(mut req: Request) -> Result<Response> {
+    let body = req.bytes().await?;
+
+    let mut headers = Headers::new();
+    headers.set("Accept", DNS_MESSAGE)?;
+    headers.set("Content-Type", DNS_MESSAGE)?;
+
+    make_request(DOH, Method::Post, Some(headers), Some(&body)).await
+}
+
+async fn get_dns_wireformat(req: Request) -> Result<Response> {
+    let Ok(url) = req.url() else {
+        return response_404();
+    };
+
+    let mut doh_url = Url::parse(DOH)?;
+    doh_url.set_query(url.query());
+
+    let mut headers = Headers::new();
+    headers.set("Accept", DNS_MESSAGE)?;
+
+    make_request(doh_url.as_str(), Method::Get, Some(headers), None).await
+}
+
+async fn get_dns_json(req: Request) -> Result<Response> {
+    let Ok(url) = req.url() else {
+        return response_404();
+    };
+
+    let mut doh_json_url = Url::parse(DOH)?;
+    doh_json_url.set_query(url.query());
+
+    let mut headers = Headers::new();
+    headers.set("Accept", DNS_JSON)?;
+
+    make_request(doh_json_url.as_str(), Method::Get, Some(headers), None).await
 }
 
 async fn make_request(
