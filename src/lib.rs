@@ -3,16 +3,12 @@ use worker::{
     Response, Result, Url,
 };
 
-pub use console_error_panic_hook::set_once as set_panic_hook;
-
 const DOH: &str = "https://1.1.1.1/dns-query";
 const DNS_MESSAGE: &str = "application/dns-message";
 const DNS_JSON: &str = "application/dns-json";
 
 #[event(fetch)]
 async fn main(req: Request, _env: Env, _ctx: Context) -> Result<Response> {
-    set_panic_hook();
-
     match req.method() {
         Method::Post if has_dns_content_type(req.headers()) => post_dns_wireformat(req).await,
 
