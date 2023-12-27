@@ -1,5 +1,7 @@
 # DoH - Deploy to Cloudflare Workers
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-rust)
+
 ## DNS over HTTPS
 
 - Using DNS Wireformat: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-wireformat/
@@ -24,19 +26,21 @@
   curl -H "accept: application/dns-json" "https://cloudflare-dns.com/dns-query?name=example.com&type=AAAA"
   ```
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-rust)
-
-A template for kick starting a Cloudflare worker project using [`workers-rs`](https://github.com/cloudflare/workers-rs).
-
-This template is designed for compiling Rust to WebAssembly and publishing the resulting worker to Cloudflare's [edge infrastructure](https://www.cloudflare.com/network/).
-
 ## Setup
 
-- install bun and just
+- prequirements
 
 ```bash
 brew install bun
 brew install just
+gem install envify
+```
+
+- setup `.env ` (see `.env.example`)
+  > optional
+
+```bash
+envify g
 ```
 
 - install wrangler
