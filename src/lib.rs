@@ -1,4 +1,7 @@
-use worker::{js_sys::Uint8Array, *};
+use worker::{
+    event, js_sys::Uint8Array, Context, Env, Fetch, Headers, Method, Request, RequestInit,
+    Response, Result, Url,
+};
 
 pub use console_error_panic_hook::set_once as set_panic_hook;
 
